@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThinkAnimal", "ThinkAnimal\ThinkAnimal.csproj", "{345F3AB0-0985-4D25-B53C-62B12E07EFE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThinkAnimal.Model", "ThinkAnimal.Model\ThinkAnimal.Model.csproj", "{EA1FB5A3-10AB-431F-96D8-5912D12EBA76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThinkAnimal.Repository", "ThinkAnimal.Repository\ThinkAnimal.Repository.csproj", "{1D26EBBD-52F5-4905-AD88-F66A56039F59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +17,14 @@ Global
 		{345F3AB0-0985-4D25-B53C-62B12E07EFE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{345F3AB0-0985-4D25-B53C-62B12E07EFE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{345F3AB0-0985-4D25-B53C-62B12E07EFE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA1FB5A3-10AB-431F-96D8-5912D12EBA76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA1FB5A3-10AB-431F-96D8-5912D12EBA76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA1FB5A3-10AB-431F-96D8-5912D12EBA76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA1FB5A3-10AB-431F-96D8-5912D12EBA76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D26EBBD-52F5-4905-AD88-F66A56039F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D26EBBD-52F5-4905-AD88-F66A56039F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D26EBBD-52F5-4905-AD88-F66A56039F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D26EBBD-52F5-4905-AD88-F66A56039F59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

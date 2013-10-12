@@ -1,5 +1,5 @@
 ﻿@using System.Web.Script.Serialization
-@model ThinkAnimal.Models.Feature
+@model ThinkAnimal.Model.Feature
 <script type="text/javascript">var feature = @Html.Raw(new JavaScriptSerializer().Serialize(Model))</script>
 <script src="~/Scripts/FeaturesHelper.js"></script>
 @{

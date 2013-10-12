@@ -4,9 +4,9 @@ using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Web.Mvc;
 using System.Web.Security;
+using ThinkAnimal.Model;
 using ThinkAnimal.Repository;
 using WebMatrix.WebData;
-using ThinkAnimal.Models;
 
 namespace ThinkAnimal.Filters
 {
@@ -40,7 +40,7 @@ namespace ThinkAnimal.Filters
                         }
                     }
 
-                    WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+                    WebSecurity.InitializeDatabaseConnection("ProjectContext", "UserProfile", "UserId", "UserName", autoCreateTables: true);
 
                     const string adminRole = "Administrator";
                     const string adminName = "Administrator";

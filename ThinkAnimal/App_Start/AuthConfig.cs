@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Web.WebPages.OAuth;
-using ThinkAnimal.Models;
-
-namespace ThinkAnimal
+﻿namespace ThinkAnimal
 {
     public static class AuthConfig
     {
