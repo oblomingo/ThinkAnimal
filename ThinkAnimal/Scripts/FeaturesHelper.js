@@ -1,11 +1,17 @@
-﻿var animationSpeed = 500;
+﻿//animation speed for slide effect
+var animationSpeed = 500;
 
+//Params to set question element position
 var questionElementTop;
 var questionElementLeft;
 var questionElementWidth;
 
+//Current feature, we will save feature here when we get next feature
 var currentFeatureId;
 var currentFeature;
+
+//Flag to control question logic
+//if it's guess animal question then we will get next feature
 var isGuessAnimalElement;
 
 window.onload = function() {
@@ -18,28 +24,55 @@ window.onload = function() {
     isGuessAnimalElement = false;
 };
 
+function getNextFeature(isYes) {
+    feature.IsYes = isYes;
+
+    $.ajax({
+        url: '/Home/GetNextFeature',
+        type: 'POST',
+        data: feature,
+        error: function () {
+            showFailElement();
+        },
+        success: function (nextFeature) {
+            if (nextFeature) {
+                feature = nextFeature;
+                showNextFeature();
+            }
+
+        }
+    });
+}
+
 
 function processAnswer(isYes, feature) {
     if (isYes && !isGuessAnimalElement) {
+        //guess animal like: "Is it bear?"
         guessAnimal(feature);
     }
     else {
+        //Save current feature and get a new one
         currentFeature = feature;
         getNextFeature(isYes);
     }   
 }
 
+
+
 function showNextFeature() {
+    //Remove question
     removeCurrentQuestion(currentFeature.Id);
     if (isGuessAnimalElement) {
         removeCurrentQuestion('animalGuess');
         isGuessAnimalElement = false;
     }
-    createQuestion(feature);
+    createQuestionElement(feature);
+    //Show next question or win/lose message
     showElement(feature.Id);
 }
 
-function createQuestion(feature) {
+
+function createQuestionElement(feature) {
     var questionElement = '<div class="question-container hidden-left" id="' + feature.Id + '">';
     questionElement += '<h2 class="text-center">' + feature.Text + '?</h2>';
     questionElement += '<div class="button-container">';
@@ -54,8 +87,7 @@ function guessAnimal(feature) {
     isGuessAnimalElement = true;
     removeCurrentQuestion(feature.Id);
     setQuestion(feature);
-    showElement('animalGuess');
-    
+    showElement('animalGuess');    
 }
 
 function setQuestion(feature) {
@@ -63,6 +95,7 @@ function setQuestion(feature) {
     questionElement.text("Is it " + feature.Animal.Title + "?");
 }
 
+//Remove current question element with animation
 function removeCurrentQuestion(featureId) {
 
     var questionContainer = $('#' + featureId);
@@ -78,6 +111,7 @@ function removeCurrentQuestion(featureId) {
     });
 }
 
+//Show question or win/fail message with animation
 function showElement(elementId) {
     var quessAnimalElement = $('#' + elementId);
 
