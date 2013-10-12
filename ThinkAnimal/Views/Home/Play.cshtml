@@ -1,0 +1,69 @@
+﻿@using System.Web.Script.Serialization
+@model ThinkAnimal.Models.Feature
+<script type="text/javascript">var feature = @Html.Raw(new JavaScriptSerializer().Serialize(Model))</script>
+<script src="~/Scripts/FeaturesHelper.js"></script>
+@{
+    ViewBag.Title = "Playing ThinkAnimal game";
+}
+<div id="main-container">
+    <div class="question-container" id="@Model.Id">   
+        @if (@Model != null)
+        {
+        
+            <h2 class="text-center">@Model.Text?</h2>
+            <div class="button-container">
+                <div class="btn btn-primary btn-large question-button" onclick="processAnswer(true, feature);">Yes</div>
+                <div class="btn btn-primary btn-large question-button" onclick="processAnswer(false, feature);">No</div>
+            </div>
+        }
+        else
+        {
+            <p>Sorry. We don't have animals in data base.</p>
+        }
+    </div>
+    <div class="question-container hidden-left" id="animalGuess">
+        <h2 class="text-center" id="animalGuessQuestion"></h2>
+        <div class="button-container">
+            <div class="btn btn-primary btn-large question-button" onclick="showWinElement();">Yes</div>
+            <div class="btn btn-primary btn-large question-button" onclick="processAnswer(true, feature);">No</div>
+        </div>
+    </div>
+    <div class="question-container hidden-left" id="winElement">
+        <hgroup class="title">
+            <h1>Yeeeeaaah!</h1>
+            <h2>Now you can think about another animal and we will try to guess it.</h2>
+        </hgroup>
+        <div class="button-container">
+            @Html.ActionLink("Ok, let's play one more time!", "Play", "Home", null, new{@class="btn btn-primary btn-large"})
+        </div>
+    </div>
+    <div class="question-container hidden-left" id="failElement">
+        <hgroup class="title">
+            <h2>Sorry, we don't know your animal. Can you think about another animal?</h2>
+        </hgroup>
+        <div class="button-container">
+        @Html.ActionLink("Ok, let's play one more time!", "Play", "Home", null, new{@class="btn btn-primary btn-large"})
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function getNextFeature(isYes) {
+        feature.IsYes = isYes;
+        
+        $.ajax({
+            url: '@Url.Action("GetNextFeature")',
+            type: 'POST',
+            data: feature,
+            error: function() {
+                showFailElement();
+            },
+            success: function (nextFeature) {
+                if (nextFeature) {
+                    feature = nextFeature;
+                    showNextFeature();
+                }
+                
+            }
+        });
+    }
+</script>

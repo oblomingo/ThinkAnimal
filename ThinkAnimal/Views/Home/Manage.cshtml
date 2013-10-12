@@ -1,0 +1,41 @@
+﻿@model List<ThinkAnimal.Models.Feature>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Animal</th>
+            <th>Feature</th>
+            <th>Next animal for "Yes"</th>
+            <th>Next animal for "No"</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var feature in Model)
+        {
+        <tr>
+            <td>@feature.Animal.Title</td>
+            <td>@feature.Text</td>
+            <td>
+                @if (feature.ChildFeatureForYes != null)
+                {
+                    @feature.ChildFeatureForYes.Animal.Title
+                }
+                else
+                {
+                    @Html.ActionLink("Add Animal", "AddAnimal", "Home", new{ParentFeatureId = feature.Id, isYes = true}, null)
+                }
+            </td>
+            <td>
+                @if (feature.ChildFeatureForNo != null)
+                {
+                    @feature.ChildFeatureForNo.Animal.Title
+                }
+                else
+                {
+                    @Html.ActionLink("Add Animal", "AddAnimal", "Home", new{ParentFeatureId = feature.Id, isYes = false}, null)
+                }
+            </td>
+        </tr>
+        }
+        
+    </tbody>
+</table>

@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Scripts.Render("~/bundles/modernizr")
+        @Styles.Render("~/Content/Bootstrap")
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="brand" href="/">The amazing game: Think animal!</a>
+                    <div class="nav-collapse collapse">
+                        @Html.Partial("_LoginPartial")
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <ul class="nav">
+                                <li>@Html.ActionLink("Manage animals and features", "Manage", "Home")</li>
+                            </ul>
+                        }
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="margin-top: 40px;">
+             @if (IsSectionDefined("featured"))
+            {
+                <div class="hero-unit">
+                    @RenderSection("featured", required: false)
+                </div>
+            }
+            @RenderBody()
+        </div>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/Scripts/Bootstrap")
+        @RenderSection("scripts", required: false)
+    </body>
+</html>
