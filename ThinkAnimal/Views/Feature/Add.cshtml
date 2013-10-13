@@ -1,0 +1,25 @@
+﻿@model ThinkAnimal.Model.Feature
+
+@{
+    ViewBag.Title = "Add animal and feature";
+}
+@using (Html.BeginForm())
+{
+    <fieldset>
+        @Html.ValidationSummary()
+        <p>Animal</p>
+        <div>
+            @Html.EditorFor(model => model.Animal.Title)
+        </div>
+        <p>Feature</p>
+        <div>
+            @Html.EditorFor(model => model.Text)
+        </div>
+        @Html.HiddenFor(model => model.ParentFeatureId)
+        @Html.HiddenFor(model => model.IsYes)
+        <input value="Add animal and feature" class="btn btn-primary btn-large" type="submit"/>
+    </fieldset>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -12,7 +12,7 @@ namespace ThinkAnimal.Controllers
         FeaturesRepository fRepository = new FeaturesRepository();
         
         /// <summary>
-        /// Start page action
+        /// First page action
         /// </summary>
         /// <returns></returns>
         public ActionResult Index()
@@ -24,13 +24,13 @@ namespace ThinkAnimal.Controllers
         }
 
         /// <summary>
-        /// Think animal start page
+        /// Game start action
         /// </summary>
         /// <returns></returns>
         public ActionResult Play()
         {
             ViewBag.Message = "Your contact page.";
-            Feature feature = fRepository.GetFeature();
+            Feature feature = fRepository.GetFirstFeature();
 
             return View(feature);
         }
@@ -38,41 +38,12 @@ namespace ThinkAnimal.Controllers
         /// <summary>
         /// Get next feature after player answer as json object (AJAX)
         /// </summary>
-        /// <param name="currentFeature"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public JsonResult GetNextFeature(Feature currentFeature)
+        public JsonResult GetFeatureById(int id)
         {
-            Feature nextFeature = fRepository.GetNextFeature(currentFeature);
-            return Json(nextFeature);
-        }
-
-        [Authorize(Roles = "Administrator")]
-        public ActionResult Manage()
-        {
-            List<Feature> features = fRepository.GetAllFeatures();
-            return View(features);
-        }
-
-        
-        [Authorize(Roles = "Administrator")]
-        public ActionResult AddAnimal(int parentFeatureId, bool isYes)
-        {
-            Feature newFeature = new Feature();
-            newFeature.ParentFeatureId = parentFeatureId;
-            newFeature.ParentFeatureAnswerIsYes = isYes;
-            return View(newFeature);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
-        public ActionResult AddAnimal(Feature feature)
-        {
-            if (ModelState.IsValid)
-            {
-                if (fRepository.SaveFeature(feature))
-                    return RedirectToAction("Manage");
-            }
-            return View(feature);
+            Feature nextFeature = fRepository.GetFeatureById(id);
+            return Json(nextFeature, JsonRequestBehavior.AllowGet);
         }
     }
 }

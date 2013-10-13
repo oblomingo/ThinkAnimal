@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+        <title>@ViewBag.Title Think Animal game</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Scripts.Render("~/bundles/modernizr")
@@ -23,7 +23,7 @@
                         @if (User.IsInRole("Administrator"))
                         {
                             <ul class="nav">
-                                <li>@Html.ActionLink("Manage animals and features", "Manage", "Home")</li>
+                                <li>@Html.ActionLink("Manage animals and features", "Manage", "Feature")</li>
                             </ul>
                         }
                     </div><!--/.nav-collapse -->

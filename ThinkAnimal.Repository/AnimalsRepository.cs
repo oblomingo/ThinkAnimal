@@ -14,9 +14,7 @@ namespace ThinkAnimal.Repository
         {
             using (var projectContext = new ProjectContext())
             {
-                if(projectContext.Animals != null)
-                    return projectContext.Animals.ToList();
-                return null;
+                return projectContext.Animals != null ? projectContext.Animals.ToList() : null;
             }
         }
     }

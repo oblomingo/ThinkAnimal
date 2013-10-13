@@ -4,37 +4,33 @@ using ThinkAnimal.Model;
 
 namespace ThinkAnimal.Repository
 {
-    public class FeaturesRepository
+    public interface IFeaturesRepository
     {
-        /// <summary>
-        /// Get next feature after player answer
-        /// </summary>
-        /// <param name="currentFeature"></param>
-        /// <returns></returns>
-        public Feature GetNextFeature(Feature currentFeature)
-        {
-            using (var projectContext = new ProjectContext())
-            {
-                return projectContext.
-                    Features.
-                    Include("Animal").
-                    SingleOrDefault(f => f.ParentFeature.Id == currentFeature.Id && 
-                        f.ParentFeatureAnswerIsYes == currentFeature.IsYes);
-            }
-        }
-        
+        Feature GetFirstFeature();
+        List<Feature> GetAllFeatures();
+        Feature GetFeatureById(int id);
+        bool AddFeature(Feature feature);
+        bool DeleteFeatureAndAnimal(int id);
+        bool SaveFeatureChanges(Feature updatedFeature);
+    }
+
+    public class FeaturesRepository : IFeaturesRepository
+    {    
         /// <summary>
         /// Get first feature in game begining
         /// </summary>
         /// <returns></returns>
-        public Feature GetFeature()
+        public Feature GetFirstFeature()
         {
             using (var projectContext = new ProjectContext())
             {
                 return projectContext.
                     Features.
                     Include("Animal").
-                    SingleOrDefault( f => f.ParentFeature == null);
+                    Include("ChildFeatureForYes").
+                    Include("ChildFeatureForNo").
+                    OrderBy(f => f.Id).
+                    FirstOrDefault();
             }
         }
 
@@ -49,35 +45,29 @@ namespace ThinkAnimal.Repository
                 List<Feature> features = projectContext.
                     Features.
                     Include("Animal").
+                    Include("ChildFeatureForYes").
+                    Include("ChildFeatureForNo").
                     ToList();
-
-                foreach (var feature in features)
-                {
-                    feature.ChildFeatureForYes = GetChildFeatureByAnswer(feature, true);
-                    feature.ChildFeatureForNo = GetChildFeatureByAnswer(feature, false);
-                }
 
                 return features;
             }
         }
 
         /// <summary>
-        /// Get child feature for after "Yes" or "No" player answers
+        /// Get feature with child elements
         /// </summary>
-        /// <param name="feature"></param>
-        /// <param name="isYes"></param>
         /// <returns></returns>
-        public Feature GetChildFeatureByAnswer(Feature feature, bool isYes)
+        public Feature GetFeatureById(int id)
         {
             using (var projectContext = new ProjectContext())
             {
                 return projectContext.
-                        Features.
-                        Include("Animal").
-                        SingleOrDefault(f => f.ParentFeature.Id == feature.Id && f.ParentFeatureAnswerIsYes == isYes);
-
+                    Features.
+                    Include("Animal").
+                    Include("ChildFeatureForYes").
+                    Include("ChildFeatureForNo").
+                    SingleOrDefault(f => f.Id == id);
             }
-
         }
 
         /// <summary>
@@ -85,17 +75,105 @@ namespace ThinkAnimal.Repository
         /// </summary>
         /// <param name="feature"></param>
         /// <returns></returns>
-        public bool SaveFeature(Feature feature)
+        public bool AddFeature(Feature feature)
         {
             using (var context = new ProjectContext())
             {
-                Feature parentFeature = context.Features.SingleOrDefault(f => f.Id == feature.ParentFeatureId);
-                feature.ParentFeature = parentFeature;
-
+                //Save feature
                 context.Features.Add(feature);
+                Feature parentFeature = context.Features.SingleOrDefault(f => f.Id == feature.ParentFeatureId);
+
+                //Set new feature as child feature for parent 
+                if (parentFeature != null)
+                {
+                    if (feature.IsYes)
+                        parentFeature.ChildFeatureForYes = feature;
+                    else
+                        parentFeature.ChildFeatureForNo = feature;
+                }
+
                 context.SaveChanges();
                 return true;
             }
         }
+
+        /// <summary>
+        /// Delete feature and animal from database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool DeleteFeatureAndAnimal(int id)
+        {
+            using (var context = new ProjectContext())
+            {
+                RemoveFeatureFromParent(id, context);
+                Feature feature = context.
+                                    Features.
+                                    Include("Animal").
+                                    SingleOrDefault(f => f.Id == id);
+                if (feature != null)
+                {
+                    //Delete feature and animal
+                    context.Animals.Remove(feature.Animal);
+                    context.Features.Remove(feature);
+                }
+                context.SaveChanges();
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Before delete we must remove feature from parent feature
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="context"></param>
+        private void RemoveFeatureFromParent(int id, ProjectContext context)
+        {
+            //feature will be ChildFeatureForYes or ChildFeatureForNo shild
+            Feature parentFeature = context.
+                Features.
+                Include("Animal").
+                SingleOrDefault(f => f.ChildFeatureForYes.Id == id);
+            if (parentFeature == null)
+            {
+                parentFeature = context.
+                    Features.
+                    Include("Animal").
+                    SingleOrDefault(f => f.ChildFeatureForNo.Id == id);
+                if (parentFeature != null) parentFeature.ChildFeatureForNo = null;
+            }
+            else
+            {
+                parentFeature.ChildFeatureForYes = null;
+            }
+        }
+
+        /// <summary>
+        /// Save changed feature and animal to db
+        /// </summary>
+        /// <param name="updatedFeature"></param>
+        public bool SaveFeatureChanges(Feature updatedFeature)
+        {
+            using (var context = new ProjectContext())
+            {
+                Feature feature =
+                    context.
+                    Features.
+                    Include("Animal").
+                    SingleOrDefault(f => f.Id == updatedFeature.Id);
+                
+                if (feature == null) return false;
+                
+                //Save updated question properties to db
+                feature.Text = updatedFeature.Text;
+
+                if (feature.Animal != null)
+                    feature.Animal.Title = updatedFeature.Animal.Title;
+
+                context.SaveChanges();
+                return true;
+            }
+        }
+
     }
 }
