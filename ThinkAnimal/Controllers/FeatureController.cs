@@ -9,6 +9,7 @@ namespace ThinkAnimal.Controllers
     {
         private readonly IFeaturesRepository _repository;
 
+        public FeatureController(){}
         public FeatureController(IFeaturesRepository repository) {
             //Get feature repository object (Unity) 
             _repository = repository;

@@ -1,5 +1,7 @@
 ﻿@model List<ThinkAnimal.Model.Feature>
-<table class="table">
+@if (Model.Count > 0)
+{
+    <table class="table">
     <thead>
         <tr>
             <th>Animal</th>
@@ -50,3 +52,8 @@
         
     </tbody>
 </table>
+}
+else
+{
+    @Html.ActionLink("Add Animal", "Add", "Feature", new{ParentFeatureId = 0, isYes = true}, null)
+}

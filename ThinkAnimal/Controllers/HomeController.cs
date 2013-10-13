@@ -9,7 +9,14 @@ namespace ThinkAnimal.Controllers
 {
     public class HomeController : Controller
     {
-        FeaturesRepository fRepository = new FeaturesRepository();
+
+        private readonly IFeaturesRepository _repository;
+        public HomeController(){}
+        public HomeController(IFeaturesRepository repository)
+        {
+            //Get feature repository object (Unity) 
+            _repository = repository;
+        }
         
         /// <summary>
         /// First page action
@@ -29,9 +36,7 @@ namespace ThinkAnimal.Controllers
         /// <returns></returns>
         public ActionResult Play()
         {
-            ViewBag.Message = "Your contact page.";
-            Feature feature = fRepository.GetFirstFeature();
-
+            Feature feature = _repository.GetFirstFeature();
             return View(feature);
         }
 
@@ -42,7 +47,7 @@ namespace ThinkAnimal.Controllers
         /// <returns></returns>
         public JsonResult GetFeatureById(int id)
         {
-            Feature nextFeature = fRepository.GetFeatureById(id);
+            Feature nextFeature = _repository.GetFeatureById(id);
             return Json(nextFeature, JsonRequestBehavior.AllowGet);
         }
     }

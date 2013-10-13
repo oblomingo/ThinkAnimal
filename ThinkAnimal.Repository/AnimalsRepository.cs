@@ -4,7 +4,11 @@ using ThinkAnimal.Model;
 
 namespace ThinkAnimal.Repository
 {
-    public class AnimalsRepository
+    public interface IAnimalsRepository
+    {
+        List<Animal> GetAnimals();
+    }
+    public class AnimalsRepository : IAnimalsRepository
     {
         /// <summary>
         /// Get all animals from data base

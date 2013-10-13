@@ -325,8 +325,6 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
@@ -334,13 +332,8 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Play.cshtml" />
     <Content Include="Views\Feature\Manage.cshtml" />
-    <Content Include="Views\Home\AddFeature.cshtml" />
-    <Content Include="Views\Home\Edit.cshtml" />
-    <Content Include="Views\Feature\Index.cshtml" />
-    <Content Include="Views\Feature\Details.cshtml" />
     <Content Include="Views\Feature\Add.cshtml" />
     <Content Include="Views\Feature\Edit.cshtml" />
-    <Content Include="Views\Feature\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
